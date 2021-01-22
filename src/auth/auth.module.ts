@@ -1,28 +1,17 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { UsersModule } from 'src/users/users.module';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import * as config from 'config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from 'src/users/users.module';
 import { UsersRepository } from 'src/users/users.repository';
-import { JwtStrategy } from './jwt.strategy';
-const jwtConfig = config.get('authentication.jwt');
+import { FirebaseAuthStrategy } from './firebase-auth.strategy';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UsersRepository]),
-    PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
-      secret: jwtConfig.secret,
-      signOptions: {
-        expiresIn: jwtConfig.expiresIn,
-      },
-    }),
+    UsersModule,
+    PassportModule.register({ defaultStrategy: 'firebase-jwt' }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
-  exports: [PassportModule, JwtStrategy],
+  controllers: [],
+  providers: [FirebaseAuthStrategy],
+  exports: [PassportModule, FirebaseAuthStrategy],
 })
 export class AuthModule {}

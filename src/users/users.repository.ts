@@ -1,30 +1,32 @@
-import {
-  ConflictException,
-  InternalServerErrorException,
-} from '@nestjs/common';
-import { AuthCredentialsDto } from 'src/auth/auth-credentials.dto';
+import { Posts } from 'src/posts/posts.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { Users } from './users.entity';
 
 @EntityRepository(Users)
 export class UsersRepository extends Repository<Users> {
-  async createUser(authCredentialsDto: AuthCredentialsDto): Promise<Users> {
-    const { username, password } = authCredentialsDto;
-    try {
-      const newUser = new Users();
-      newUser.username = username;
-      newUser.password = password;
-      await newUser.save();
-      return newUser;
-    } catch (error) {
-      console.log(error);
-      if (error.code === '23505')
-        throw new ConflictException('Username already exists');
-      else throw new InternalServerErrorException();
-    }
+  async createUser(
+    name: string,
+    email: string,
+    picture: string,
+  ): Promise<Users> {
+    const newUser = new Users(name, email, picture, [], []);
+    await newUser.save();
+    return newUser;
   }
-  async findUserByUsername(username: string): Promise<Users> {
-    const user = await this.findOne({ where: { username } });
-    return user;
+  async addPostToUser(user: Users, newPost: Posts): Promise<void> {
+    if (!user.posts) user.posts = [newPost];
+    else user.posts = [...user.posts, newPost];
+    await user.save();
+  }
+  hasAlreadyVoted(currentUser: Users, post: Posts) {
+    const found = currentUser.votedPosts.find(
+      (votedPost) => votedPost.id === post.id,
+    );
+    if (found) return true;
+    else return false;
+  }
+  async addPostToVoted(currentUser: Users, post: Posts) {
+    currentUser.votedPosts.push(post);
+    await currentUser.save();
   }
 }

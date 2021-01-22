@@ -1,0 +1,34 @@
+import {
+  Injectable,
+  NestInterceptor,
+  ExecutionContext,
+  CallHandler,
+} from '@nestjs/common';
+import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { Logger } from 'winston';
+import { formatISO, differenceInMilliseconds } from 'date-fns';
+
+@Injectable()
+export class LoggingInterceptor implements NestInterceptor {
+  constructor(private readonly logger: Logger) {}
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const httpContext = context.switchToHttp();
+    const { headers, method, originalUrl } = httpContext.getRequest();
+    delete headers.authorization;
+    const start = new Date();
+    return next.handle().pipe(
+      tap(() => {
+        this.logger.info({
+          request: {
+            headers,
+            method,
+            originalUrl,
+          },
+          timestamp: formatISO(start),
+          responseTime: differenceInMilliseconds(Date.now(), start),
+        });
+      }),
+    );
+  }
+}

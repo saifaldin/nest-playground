@@ -1,3 +1,4 @@
+import { Options } from 'src/options/options.entity';
 import { Users } from 'src/users/users.entity';
 import {
   BaseEntity,
@@ -5,6 +6,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -14,14 +16,34 @@ export class Posts extends BaseEntity {
   id: number;
 
   @Column()
-  title: string;
+  caption: string;
 
   @Column()
-  options: string;
+  isHidden: boolean;
+
+  @OneToMany(() => Options, (option) => option.post)
+  options: Options[];
+
+  @ManyToOne(() => Users, (user) => user.posts)
+  author: Users;
 
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => Users, (user) => user.posts)
-  author: number;
+  constructor(
+    caption: string,
+    isHidden: boolean,
+    options: Options[],
+    author: Users,
+  ) {
+    super();
+    this.caption = caption;
+    this.isHidden = isHidden;
+    this.options = options;
+    this.author = author;
+  }
+}
+
+enum lol {
+  hi = 'hi',
 }

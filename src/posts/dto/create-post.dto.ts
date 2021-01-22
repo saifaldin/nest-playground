@@ -1,4 +1,5 @@
 export class CreatePostDto {
-  title: string;
-  options: string;
+  caption: string;
+  isHidden: boolean;
+  options: (string | Express.Multer.File)[];
 }
