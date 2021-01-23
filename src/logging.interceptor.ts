@@ -16,9 +16,10 @@ export class LoggingInterceptor implements NestInterceptor {
     const httpContext = context.switchToHttp();
     const { headers, method, originalUrl } = httpContext.getRequest();
     delete headers.authorization;
-    const start = new Date();
+    const start = Date.now();
     return next.handle().pipe(
       tap(() => {
+        const end = Date.now();
         this.logger.info({
           request: {
             headers,
@@ -26,7 +27,7 @@ export class LoggingInterceptor implements NestInterceptor {
             originalUrl,
           },
           timestamp: formatISO(start),
-          responseTime: differenceInMilliseconds(Date.now(), start),
+          responseTime: differenceInMilliseconds(end, start),
         });
       }),
     );

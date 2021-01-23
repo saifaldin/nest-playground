@@ -43,7 +43,3 @@ export class Posts extends BaseEntity {
     this.author = author;
   }
 }
-
-enum lol {
-  hi = 'hi',
-}
