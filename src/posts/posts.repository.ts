@@ -1,5 +1,5 @@
-import { Options } from 'src/options/options.entity';
-import { Users } from 'src/users/users.entity';
+import { Options } from '../options/options.entity';
+import { Users } from '../users/users.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { Posts } from './posts.entity';

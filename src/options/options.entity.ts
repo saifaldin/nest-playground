@@ -3,10 +3,9 @@ import {
   Column,
   Entity,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Posts } from 'src/posts/posts.entity';
+import { Posts } from '../posts/posts.entity';
 import { OptionType } from './option-type.enum';
 
 @Entity()
