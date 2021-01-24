@@ -8,8 +8,8 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-firebase-jwt';
 import { auth } from 'firebase-admin';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Users } from 'src/users/users.entity';
-import { UsersRepository } from 'src/users/users.repository';
+import { Users } from '../users/users.entity';
+import { UsersRepository } from '../users/users.repository';
 
 @Injectable()
 export class FirebaseAuthStrategy extends PassportStrategy(Strategy) {

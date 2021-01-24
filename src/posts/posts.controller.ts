@@ -13,10 +13,10 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
-import { storage } from 'src/options/file-upload/cloudinary-storage.options';
-import { fileFilter } from 'src/options/file-upload/multer.options';
-import { User } from 'src/users/user.decorator';
-import { Users } from 'src/users/users.entity';
+import { storage } from '../options/file-upload/cloudinary-storage.options';
+import { fileFilter } from '../options/file-upload/multer.options';
+import { User } from '../users/user.decorator';
+import { Users } from '../users/users.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostsService } from './posts.service';
 

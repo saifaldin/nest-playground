@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from 'src/users/users.module';
-import { UsersRepository } from 'src/users/users.repository';
+import { UsersModule } from '../users/users.module';
+import { UsersRepository } from '../users/users.repository';
 import { FirebaseAuthStrategy } from './firebase-auth.strategy';
 
 @Module({

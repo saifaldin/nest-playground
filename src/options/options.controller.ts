@@ -1,7 +1,7 @@
 import { Controller, Param, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { User } from 'src/users/user.decorator';
-import { Users } from 'src/users/users.entity';
+import { User } from '../users/user.decorator';
+import { Users } from '../users/users.entity';
 import { OptionsService } from './options.service';
 
 @Controller('options')

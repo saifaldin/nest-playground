@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Options } from '../options/options.entity';
 import { OptionsRepository } from '../options/options.repository';
 import { Users } from '../users/users.entity';
-import { UsersRepository } from '../users/users.repository';
 import { CreatePostDto } from './dto/create-post.dto';
 import { Posts } from './posts.entity';
 import { PostsRepository } from './posts.repository';

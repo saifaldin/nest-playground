@@ -1,4 +1,4 @@
-import { Posts } from 'src/posts/posts.entity';
+import { Posts } from '../posts/posts.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { Users } from './users.entity';
 
