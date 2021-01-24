@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Options } from '../options/options.entity';
 import { OptionsRepository } from '../options/options.repository';
@@ -16,6 +16,7 @@ export class PostsService {
 
   async getPosts(postId?: number) {
     const posts = await this.postsRepository.getPosts(postId);
+    if (!posts) throw new NotFoundException('post not found');
     return posts;
   }
 
@@ -33,8 +34,7 @@ export class PostsService {
       currentUser,
       newOptions,
     );
-
-    delete newPost.author.posts;
+    if (newPost.author) delete newPost.author.posts;
     return newPost;
   }
 }
