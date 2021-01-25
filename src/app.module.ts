@@ -5,8 +5,6 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OptionsModule } from './options/options.module';
 import typeOrmOpts from './orm.config';
-// import { WinstonModule } from 'nest-winston';
-// import { winstonLoggerOptions } from './winston.options';
 import { UploadModule } from './upload/upload.module';
 
 @Module({
@@ -17,7 +15,6 @@ import { UploadModule } from './upload/upload.module';
     OptionsModule,
     TypeOrmModule.forRoot(typeOrmOpts),
     UploadModule,
-    // WinstonModule.forRoot(winstonLoggerOptions),
   ],
   controllers: [],
   providers: [],

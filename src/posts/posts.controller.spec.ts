@@ -45,6 +45,6 @@ describe('- Posts Controller', () => {
   });
   describe('- Create post with text or image options', () => {
     const mockCreatePostDto = {};
-    it('Create post with images as options', () => {});
+    // it('Create post with images as options', () => {});
   });
 });

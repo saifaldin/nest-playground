@@ -11,15 +11,10 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
-import { storage } from '../upload/cloudinary-storage.options';
-import { fileFilter } from '../upload/multer.options';
 import { User } from '../users/user.decorator';
 import { Users } from '../users/users.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostsService } from './posts.service';
-
-const multerOptions: MulterOptions = { storage, fileFilter };
 
 @Controller('posts')
 @UseGuards(AuthGuard('firebase-jwt'))
@@ -37,7 +32,7 @@ export class PostsController {
   }
 
   @Post()
-  @UseInterceptors(FilesInterceptor('options', 4, multerOptions))
+  @UseInterceptors(FilesInterceptor('options', 4))
   createPost(
     @Body('options') textOptions: string[],
     @UploadedFiles() files: Express.Multer.File[],
@@ -46,7 +41,6 @@ export class PostsController {
   ) {
     if (files.length) createPostDto.options = files;
     else createPostDto.options = textOptions;
-
     return this.postsService.createPost(createPostDto, currentUser);
   }
 }
