@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  Inject,
   Param,
   Post,
   UploadedFiles,
