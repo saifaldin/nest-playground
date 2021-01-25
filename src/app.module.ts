@@ -7,6 +7,7 @@ import { OptionsModule } from './options/options.module';
 import typeOrmOpts from './orm.config';
 // import { WinstonModule } from 'nest-winston';
 // import { winstonLoggerOptions } from './winston.options';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import typeOrmOpts from './orm.config';
     UsersModule,
     OptionsModule,
     TypeOrmModule.forRoot(typeOrmOpts),
+    UploadModule,
     // WinstonModule.forRoot(winstonLoggerOptions),
   ],
   controllers: [],
