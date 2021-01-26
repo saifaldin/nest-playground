@@ -31,20 +31,55 @@ describe('- Posts Controller', () => {
     it('- Get multiple posts', () => {
       postsService.getPosts.mockReturnValue('test');
       expect(postsService.getPosts).not.toHaveBeenCalled();
-      const testReturn = postsController.getPosts();
+      const result = postsController.getPosts();
       expect(postsService.getPosts).toHaveBeenCalledWith();
-      expect(testReturn).toEqual('test');
+      expect(result).toEqual('test');
     });
     it('- Get one post by id', () => {
       postsService.getPosts.mockReturnValue('test');
       expect(postsService.getPosts).not.toHaveBeenCalled();
-      const testReturn = postsController.getOnePost(1);
+      const result = postsController.getOnePost(1);
       expect(postsService.getPosts).toHaveBeenCalledWith(1);
-      expect(testReturn).toEqual('test');
+      expect(result).toEqual('test');
     });
   });
   describe('- Create post with text or image options', () => {
-    const mockCreatePostDto = {};
-    // it('Create post with images as options', () => {});
+    const mockCreatePostDto = { options: [] };
+    it('- Create post with images as options', () => {
+      const mockFilesOption = ['files'];
+      const mockText = ['text'];
+      postsService.createPost.mockReturnValue('test');
+      expect(postsService.createPost).not.toHaveBeenCalled();
+      const result = postsController.createPost(
+        mockText,
+        mockFilesOption,
+        mockCreatePostDto,
+        mockUser,
+      );
+      expect(mockCreatePostDto.options).toEqual(mockFilesOption);
+      expect(postsService.createPost).toHaveBeenCalledWith(
+        mockCreatePostDto,
+        mockUser,
+      );
+      expect(result).toEqual('test');
+    });
+    it('- Create post with text as options', () => {
+      const mockFilesOptions = [];
+      const mockText = ['text'];
+      postsService.createPost.mockReturnValue('test');
+      expect(postsService.createPost).not.toHaveBeenCalled();
+      const result = postsController.createPost(
+        mockText,
+        mockFilesOptions,
+        mockCreatePostDto,
+        mockUser,
+      );
+      expect(mockCreatePostDto.options).toEqual(mockText);
+      expect(postsService.createPost).toHaveBeenCalledWith(
+        mockCreatePostDto,
+        mockUser,
+      );
+      expect(result).toEqual('test');
+    });
   });
 });

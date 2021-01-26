@@ -24,7 +24,6 @@ export class PostsService {
 
   async createPost(createPostDto: CreatePostDto, currentUser: Users) {
     // Create new options
-    console.log(createPostDto.options);
     const newOptions = await this.optionsRepository.createOptions(
       createPostDto.options,
     );
