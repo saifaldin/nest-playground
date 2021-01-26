@@ -13,7 +13,7 @@ cloudinary.config({
   api_secret,
 });
 
-export const cloudinaryStorage = new CloudinaryStorage({
+export default new CloudinaryStorage({
   cloudinary,
   params: (req, file) => {
     return {
