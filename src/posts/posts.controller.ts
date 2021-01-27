@@ -1,16 +1,16 @@
 import {
-  Body,
+  BadRequestException,
   Controller,
   Get,
   Param,
   Post,
-  UploadedFiles,
+  Req,
+  Res,
   UseGuards,
-  UseInterceptors,
-  ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { providers } from 'src/upload/providers/enum/providers.enum';
+import { UploadService } from 'src/upload/upload.service';
 import { User } from '../users/user.decorator';
 import { Users } from '../users/users.entity';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -19,7 +19,10 @@ import { PostsService } from './posts.service';
 @Controller('posts')
 @UseGuards(AuthGuard('firebase-jwt'))
 export class PostsController {
-  constructor(private readonly postsService: PostsService) {}
+  constructor(
+    private readonly postsService: PostsService,
+    private readonly uploadService: UploadService,
+  ) {}
 
   @Get()
   getPosts() {
@@ -32,15 +35,28 @@ export class PostsController {
   }
 
   @Post()
-  @UseInterceptors(FilesInterceptor('options', 4))
-  createPost(
-    @Body('options') textOptions: string[],
-    @UploadedFiles() files: Express.Multer.File[],
-    @Body(ValidationPipe) createPostDto: CreatePostDto,
-    @User() currentUser: Users,
-  ) {
-    if (files.length) createPostDto.options = files;
-    else createPostDto.options = textOptions;
-    return this.postsService.createPost(createPostDto, currentUser);
+  async createPost(@Req() req, @Res() res) {
+    try {
+      const files: Express.Multer.File[] = await this.uploadService.uploadService(
+        req,
+        res,
+        providers.CLOUDINARY,
+      );
+      const { caption, isHidden, options: textOptions } = req.body;
+      const createPostDto: CreatePostDto = {
+        caption,
+        isHidden,
+        options: files,
+      };
+      if (files.length) createPostDto.options = files;
+      else createPostDto.options = textOptions;
+      const result = await this.postsService.createPost(
+        createPostDto,
+        req.user,
+      );
+      res.json(result);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }

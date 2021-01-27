@@ -1,5 +1,5 @@
 import minioStorage from 'multer-minio-storage';
-import config from 'config';
+import * as config from 'config';
 import { generateFileName } from './multer.options';
 import { Client } from 'minio';
 
@@ -22,7 +22,7 @@ const generateKey = (mimetype: string) => {
   key = generateFileName(mimetype);
 };
 
-export default minioStorage({
+export const minioStorageEngine = minioStorage({
   minioClient,
   bucket,
   key: (req, file, cb) => {

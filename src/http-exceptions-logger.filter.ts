@@ -3,6 +3,7 @@ import {
   Catch,
   ArgumentsHost,
   HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { Logger } from 'winston';
 import { formatISO } from 'date-fns';
@@ -29,8 +30,13 @@ export class AllExceptionsFilterLogger implements ExceptionFilter {
       timestamp: formatISO(Date.now()),
     });
 
-    response.status(exception.getStatus()).json({
-      statusCode: exception.getStatus(),
+    const status =
+      exception instanceof HttpException
+        ? exception.getStatus()
+        : HttpStatus.INTERNAL_SERVER_ERROR;
+
+    response.status(status).json({
+      statusCode: status,
       message: message,
       timestamp: formatISO(Date.now()),
       path: url,

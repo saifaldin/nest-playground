@@ -6,7 +6,7 @@ import { UsersModule } from '../users/users.module';
 import { PostsController } from './posts.controller';
 import { PostsRepository } from './posts.repository';
 import { PostsService } from './posts.service';
-import { UploadModule } from 'src/upload/upload.module';
+import { UploadModule } from '../upload/upload.module';
 
 @Module({
   imports: [

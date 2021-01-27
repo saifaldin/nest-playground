@@ -2,7 +2,7 @@ import multer from 'multer';
 import { BadRequestException } from '@nestjs/common';
 
 export const fileFilter = (
-  req: Request,
+  req: Express.Request,
   file: Express.Multer.File,
   cb: multer.FileFilterCallback,
 ) => {
