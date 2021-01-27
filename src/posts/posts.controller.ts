@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   Get,
   Param,
@@ -7,6 +8,7 @@ import {
   Req,
   Res,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { providers } from 'src/upload/providers/enum/providers.enum';
@@ -35,28 +37,14 @@ export class PostsController {
   }
 
   @Post()
-  async createPost(@Req() req, @Res() res) {
-    try {
-      const files: Express.Multer.File[] = await this.uploadService.uploadService(
-        req,
-        res,
-        providers.CLOUDINARY,
-      );
-      const { caption, isHidden, options: textOptions } = req.body;
-      const createPostDto: CreatePostDto = {
-        caption,
-        isHidden,
-        options: files,
-      };
-      if (files.length) createPostDto.options = files;
-      else createPostDto.options = textOptions;
-      const result = await this.postsService.createPost(
-        createPostDto,
-        req.user,
-      );
-      res.json(result);
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
+  async createPost(
+    @Body(ValidationPipe) createPostDto: CreatePostDto,
+    @Body('options') textOptions,
+    @Req() req,
+  ) {
+    if (req.files.length) createPostDto.options = req.files;
+    else createPostDto.options = textOptions;
+    const result = await this.postsService.createPost(createPostDto, req.user);
+    return result;
   }
 }
