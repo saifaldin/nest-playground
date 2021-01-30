@@ -40,5 +40,14 @@ export const minioStorageEngine = minioStorage({
   contentType: (req, file, cb) => cb(null, file.mimetype),
 });
 
+export const changeMinioResult = (files) => {
+  const newFiles = files.map((file) => ({
+    ...file,
+    filename: file.key,
+    path: file.metadata.url,
+  }));
+  return newFiles;
+};
+
 // in minioStorage storage engine options, key must be called before metadata
 // to be able to cache the key value and use it later in metadata

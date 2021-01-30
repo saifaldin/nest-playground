@@ -14,6 +14,12 @@ import { PostsService } from './posts.service';
 import { UploadModule } from '../upload/upload.module';
 import { UploadService } from 'src/upload/upload.service';
 import { providers } from 'src/upload/providers/enum/providers.enum';
+import { cloudinaryStorageEngine } from '../upload/providers/cloudinary.storage';
+import {
+  changeMinioResult,
+  minioStorageEngine,
+} from '../upload/providers/minio.storage';
+const multer = require('multer');
 
 @Module({
   imports: [
@@ -31,12 +37,8 @@ export class PostsModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(async (req, res, next) => {
-        const files = await this.uploadService.uploadService(
-          req,
-          res,
-          providers.CLOUDINARY,
-        );
-        // console.log(files);
+        const provider = providers.CLOUDINARY;
+        await this.uploadService.uploadToMultipleProviders(req, res);
         next();
       })
       .forRoutes({ path: '/posts', method: RequestMethod.POST });

@@ -38,6 +38,7 @@ export class AllExceptionsFilterLogger implements ExceptionFilter {
     response.status(status).json({
       statusCode: status,
       message: message,
+      stack,
       timestamp: formatISO(Date.now()),
       path: url,
     });

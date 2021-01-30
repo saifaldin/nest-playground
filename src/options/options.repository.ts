@@ -9,19 +9,20 @@ export class OptionsRepository extends Repository<Options> {
     options: (string | Express.Multer.File)[],
   ): Promise<Options[]> {
     const newOptions: Options[] = [];
-
     for (const option of options) {
       let newOption: Options;
 
       if (typeof option === 'string')
         newOption = new Options(OptionType.TEXT, option);
-      else
+      else {
+        const isCloudinary = option.path.includes('cloudinary');
         newOption = new Options(
           OptionType.FILE,
           option.filename,
           option.path,
-          'cloudinary',
+          isCloudinary ? 'cloudinary' : 'minio',
         );
+      }
 
       newOption = await newOption.save();
       newOptions.push(newOption); // Array of the saved entities
