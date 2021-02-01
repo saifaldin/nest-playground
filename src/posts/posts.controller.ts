@@ -1,30 +1,23 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
   Param,
   Post,
   Req,
-  Res,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { providers } from 'src/upload/providers/enum/providers.enum';
 import { UploadService } from 'src/upload/upload.service';
-import { User } from '../users/user.decorator';
-import { Users } from '../users/users.entity';
+import { isTruthy } from 'src/utility/isTruthy';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostsService } from './posts.service';
 
 @Controller('posts')
-@UseGuards(AuthGuard('firebase-jwt'))
+// @UseGuards(AuthGuard('firebase-jwt'))
 export class PostsController {
-  constructor(
-    private readonly postsService: PostsService,
-    private readonly uploadService: UploadService,
-  ) {}
+  constructor(private readonly postsService: PostsService) {}
 
   @Get()
   getPosts() {
@@ -44,6 +37,8 @@ export class PostsController {
   ) {
     if (req.files.length) createPostDto.options = req.files;
     else createPostDto.options = textOptions;
+    console.log(createPostDto);
+    createPostDto.isHidden = isTruthy(createPostDto.isHidden);
     const result = await this.postsService.createPost(createPostDto, req.user);
     return result;
   }

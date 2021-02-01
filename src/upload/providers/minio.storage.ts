@@ -41,11 +41,15 @@ export const minioStorageEngine = minioStorage({
 });
 
 export const changeMinioResult = (files) => {
-  const newFiles = files.map((file) => ({
-    ...file,
-    filename: file.key,
-    path: file.metadata.url,
-  }));
+  const newFiles = files.map((file) => {
+    if (!file.path)
+      return {
+        ...file,
+        filename: file.key,
+        path: file.metadata.url,
+      };
+    else return file;
+  });
   return newFiles;
 };
 
